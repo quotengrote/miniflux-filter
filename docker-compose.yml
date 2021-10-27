@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+  mf-filter:
+    container_name: mf-filter
+    restart: always
+    environment:
+      - TZ=Europe/Berlin
+      - mf_auth_token=XN2klsvvD[...]-dcHPaeQ=
+      - mf_api_url=https://miniflux.[...].net/v1
+      - mf_sleep=60
+      #- mf_debug_output=1
+    image: quotengrote/miniflux-filter:latest
+    volumes:
+      - ./filter.txt:/data/filter.txt
