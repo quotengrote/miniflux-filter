@@ -12,10 +12,10 @@
 <!-- /TOC -->
 
 ### Introduction
-``miniflux-filter`` is a small bash-script for [miniflux](https://miniflux.app) that marks certain articles as read if the search conditions met.
+``miniflux-filter`` is a small bash-script for [miniflux](https://miniflux.app) that marks certain articles as read, if the search conditions met.
 
 ### Getting Started
-1. create a [api-key](https://miniflux.app/docs/api.html#authentication) in miniflux
+1. create an [api-key](https://miniflux.app/docs/api.html#authentication) in miniflux
 2. create a [compose-file](./docker-compose.yml)
 3. create a [filter-file](./filter.txt)
 4. ````docker-compose up````
