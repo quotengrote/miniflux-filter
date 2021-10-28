@@ -78,7 +78,7 @@ function mark_as_read {
   # der wert muss escaped werden, aber NICHT die variable die uebergeben wird
   for i in $marked_entries; do
     anzahl=$((anzahl+1))
-    curl --request PUT --silent --header "X-Auth-Token: $mf_auth_token" --header "Content-Type: application/json" --data "{\"entry_ids\": [$i], \"status\": \"unread\"}" "$mf_api_url/entries" # XXXXXXXX AUNREAD WIEDER RAUS, zu read andern
+    curl --request PUT --silent --header "X-Auth-Token: $mf_auth_token" --header "Content-Type: application/json" --data "{\"entry_ids\": [$i], \"status\": \"read\"}" "$mf_api_url/entries"
     # gebe aus welcher eintrag gefilter wurde, cur begrenzt die maximale laenge auf 40 zeichen
     echo Filtered entry "$i" - "$(curl --silent --header "X-Auth-Token: $mf_auth_token" $mf_api_url/entries/"$i" | jq .title | cut -c -70)".
   done
