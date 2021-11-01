@@ -57,7 +57,7 @@ heise.de:TechStage |
 - [jqplay.org](https://jqplay.org)
 
 ### Debug
-If `MF_DEBUG` is set to `1` `miniflux-filter`  will print extra output to stdout.
+If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdout.
 - the current Variable
 - URL + Values for filtering
 - almost all function calls
@@ -78,18 +78,16 @@ If `MF_DEBUG` is set to `1` `miniflux-filter`  will print extra output to stdout
 
 
 ## Build Container
+```
 git clone https://git.mgrote.net/mg/miniflux-filter
 cd miniflux-filter
 export MF_DOCKER_HUB_PASS=<your_docker_hub_pass>
 export MF_DOCKER_HUB_USER=<your_docker_hub_user>
 ./build.sh
-
+```
 
 ## ToDo
 - [ ] search in content, not only title
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
-
-
-IF DEBUG IS SET TAHN XXXXXXX
