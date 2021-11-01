@@ -5,10 +5,10 @@ services:
     restart: always
     environment:
       - TZ=Europe/Berlin
-      - mf_auth_token=XN2klsvvD[...]-dcHPaeQ=
-      - mf_api_url=https://miniflux.[...].net/v1
-      - mf_sleep=60
-      #- mf_debug_output=1
+      - MF_AUTH_TOKEN=XN2klsvvD[...]-dcHPaeQ=
+      - MF_API_URL=https://miniflux.[...].net/v1
+      - MF_SLEEP=60
+      #- MF_DEBUG=1
     image: quotengrote/miniflux-filter:latest
     volumes:
       - ./filter.txt:/data/filter.txt

@@ -7,6 +7,9 @@
   * [example docker-compose](#example-docker-compose)
   * [example filter-file](#example-filter-file)
 * [Misc](#misc)
+* [Debug](#debug)
+  * [Exit-Codes](#exit-codes)
+* [Build Container](#build-container)
 * [ToDo](#todo)
 * [License](#license)
 <!-- /TOC -->
@@ -29,10 +32,10 @@ services:
     restart: always
     environment:
       - TZ=Europe/Berlin
-      - mf_auth_token=XN2klsvvD[...]-dcHPaeQ=
-      - mf_api_url=https://miniflux.[...].net/v1
-      - mf_sleep=60
-      #- mf_debug_output=1
+      - MF_AUTH_TOKEN=XN2klsvvD[...]-dcHPaeQ=
+      - MF_API_URL=https://miniflux.[...].net/v1
+      - MF_SLEEP=60
+      #- MF_DEBUG=1
     image: quotengrote/miniflux-filter:latest
     volumes:
       - ./filter.txt:/data/filter.txt
@@ -53,9 +56,40 @@ heise.de:TechStage |
 - [tborychowski/miniflux-filter](https://github.com/tborychowski/miniflux-filter)
 - [jqplay.org](https://jqplay.org)
 
+### Debug
+If `MF_DEBUG` is set to `1` `miniflux-filter`  will print extra output to stdout.
+- the current Variable
+- URL + Values for filtering
+- almost all function calls
+
+#### Exit-Codes
+| RC | Description |
+| -- | -- |
+| 1 | Filter-File not found |
+| 2 | MF_AUTH_TOKEN not set |
+| 3 | MF_API_URL not set |
+| 4 | Filter-Datei is a dir |
+| 5 | jq is not installed |
+| 6 | curl is not installed |
+| 7 | could not connect to miniflux |
+| 8 | xargs is not installed |
+| 9 | sed is not installed |
+| 10 | sort is not installed |
+
+
+## Build Container
+git clone https://git.mgrote.net/mg/miniflux-filter
+cd miniflux-filter
+export MF_DOCKER_HUB_PASS=<your_docker_hub_pass>
+export MF_DOCKER_HUB_USER=<your_docker_hub_user>
+./build.sh
+
 
 ## ToDo
 - [ ] search in content, not only title
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
+
+
+IF DEBUG IS SET TAHN XXXXXXX

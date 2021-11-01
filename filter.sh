@@ -1,133 +1,195 @@
 #!/bin/bash
 
-printf "miniflux-filter - git.mgrote.net/mg/miniflux-filter\n"
+# Header
+if [[ $MF_DEBUG -eq 1 ]]; then
+    printf "miniflux-filter - git.mgrote.net/mg/miniflux-filter\n"
+fi
 
-## Beispiel-Variablen
-###  werden in jedem durchlauf neu eingelesen, script muss also nicht neugestartet werden fur filteraenderungen
-### miniflux api key
-### export mf_auth_token="XN2klsvvDUKf[...]dcHPaeQ="
-### minuflux url
-### export mf_api_url="https://miniflux.[...].net/v1"
 ### datei mit filter ausdruecken
-mf_filterlist_file="${mf_filterlist_file:=/data/filter.txt}"
+MF_FILTERLIST_FILE="${MF_FILTERLIST_FILE:=/data/filter.txt}"
 ### wartezeit zwischen durchlaeufen
-mf_sleep="${mf_sleep:=30}"
-### mf_debug_output output
+MF_SLEEP="${MF_SLEEP:=30}"
+### MF_DEBUG output
 # standardmäßig 0 = aus
-mf_debug_output="${mf_debug_output:=0}"
-### zaehlvariable
-n=1
-anzahl="0"
+MF_DEBUG="${MF_[DEBUG]=0}"
 
-function debug_output {
-  echo Filterlist-File: $mf_filterlist_file
-  echo Sleep-Intervall: $mf_sleep
-  echo Auth-Token: $mf_auth_token
-  echo MF-Url: $mf_api_url
-  echo Anzahl Filter: $(wc -l $mf_filterlist_file)
+# Functions
+function check_dependencies {
+    # pruefe ob jq installiert ist
+    # https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] check dependencies"
+    fi
+    if ! command -v jq &> /dev/null
+    then
+        echo "[ERROR] jq could not be found!"
+        exit 5
+    fi
+    if ! command -v curl &> /dev/null
+    then
+        echo "[ERROR] curl could not be found!"
+        exit 6
+    fi
+    if ! command -v xargs &> /dev/null
+    then
+        echo "[ERROR] xargs could not be found!"
+        exit 8
+    fi
+    if ! command -v sed &> /dev/null
+    then
+        echo "[ERROR] sed could not be found!"
+        exit 9
+    fi
+    if ! command -v sort &> /dev/null
+    then
+        echo "[ERROR] sort could not be found!"
+        exit 10
+    fi
 }
-
 function check_vars {
-  # pruefe ob alle vars gesetzt sind
-  if [[ -z "${mf_auth_token}" ]]; then
-    echo '"$mf_auth_token"' not set.
-    exit 2
-  fi
-  if [[ -z "${mf_api_url}" ]]; then
-    echo '"$mf_api_url"' not set.
-    exit 3
-  fi
-  # pruefe ob filter-datei NICHT existiert
-  if [ ! -e "$mf_filterlist_file" ]; then
-    echo "$mf_filterlist_file" not readable!
-    exit 1
-  fi
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] check if vars are (correctly) set"
+    fi
+    # pruefe ob alle vars gesetzt sind
+    # -z = ob laenge gleich null ist
+    if [[ -z "${MF_AUTH_TOKEN}" ]]; then
+        # shellcheck disable=SC2016
+          # shellcheck disable=SC2102
+        echo [ERROR] '"$MF_AUTH_TOKEN"' not set.
+        exit 2
+    fi
+    if [[ -z "${MF_API_URL}" ]]; then
+        # shellcheck disable=SC2016
+          # shellcheck disable=SC2102
+        echo [ERROR] '"$MF_API_URL"' not set.
+        exit 3
+    fi
+    # prüfe ob filter-datei ein ordner ist
+    # kann bei einem falschen bind-mount passieren
+    if [[ -d "$MF_FILTERLIST_FILE" ]]; then
+        # shellcheck disable=SC2102
+        echo [ERROR] "$MF_FILTERLIST_FILE" is a directory!
+        exit 4
+    fi
+    # pruefe ob filter-datei NICHT existiert
+    if [[ ! -e "$MF_FILTERLIST_FILE" ]]; then
+        # shellcheck disable=SC2102
+        echo [ERROR] "$MF_FILTERLIST_FILE" not readable!
+        exit 1
+    fi
+}
+function check_connectivity {
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] check if miniflux-api can be reached"
+    fi
+    # pruefe ob miniflux erreichbar ist, wenn ja setze abbruchbedingung, sonst warte
+    mf_connectivity=0
+    while [[ $mf_connectivity -eq 0 ]]; do
+        http_status_code=$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL/me" -i | grep HTTP/2 | awk '{print $2}')
+        if [[ $http_status_code -eq 200 ]]; then
+            mf_connectivity=1
+        else
+            mf_connectivity=0
+            sleep 10
+            echo "[INFO] wait for miniflux-api..."
+            if [[ $MF_DEBUG -eq 1 ]]; then
+                echo "[DEBUG] api could not be reached, wait 10s"
+            fi
+        fi
+    done
+}
+function debug_output {
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo -----------------------------------------------------
+        echo [DEBUG] Filterlist-File: "$MF_FILTERLIST_FILE"
+        echo [DEBUG] Sleep-Intervall: "$MF_SLEEP"
+        echo [DEBUG] Auth-Token: "$MF_AUTH_TOKEN"
+        echo [DEBUG] MF-Url: "$MF_API_URL"
+        echo [DEBUG] Anzahl Filter: "$(wc -l "$MF_FILTERLIST_FILE")"
+        echo -----------------------------------------------------
+    fi
+}
+function get_unread_entries {
+    # hole alle ungelesenen entries und speichere sie in der variable unread_entries
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] get unread entries from miniflux"
+    fi
+    unread_entries="$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL/entries?status=unread&limit=0")"
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] show unread entries from miniflux"
+        echo -----------------------------------------------------
+        echo "$unread_entries"
+        echo -----------------------------------------------------
+    fi
 }
 function filter_entries {
-  echo "Checking filters..."
-  # fuer jede Zeile in $mf_filterlist_file
-  while read -r line; do
-    # setze $url auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
-    url=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=1)
-    # setze $suchbegriff auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
-    suchbegriff=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=2)
-    # hole alle ungelesenen eintraege von miniflux, pipe an jq
-    # in jq uebergebe shell-variablen an jq selber
-    # entferne die erste ebene
-    # suche jeden eintrag wo die feed_url == $url, konvertiere in kleinschreibung, das selbe fur den title
-    # gebe dann nur die id aus
-    # die id, wird dann an die variable marked_entries angehangen
-    # z.B. 53443 52332 48787 [...]
-    if [[ -n "$url" ]]; then
-      # abfangen der letzten zeile die leer ist; sonst wird alles gefiltert
-      if [[ -n "$suchbegriff" ]]; then
-        # abfangen der letzten zeile die leer ist; sonst wird alles gefiltert
-        if [[ $mf_debug_output -eq 1 ]]; then
-          echo URL "$url" - Suchbegriff: "$suchbegriff"
+    echo "[INFO] Filtering entries..."
+    # fuer jede Zeile in $MF_FILTERLIST_FILE
+    while read -r line; do
+        if [[ $MF_DEBUG -eq 1 ]]; then
+            echo "[DEBUG] set search values"
         fi
-        marked_entries+=" $(curl --silent --header "X-Auth-Token: $mf_auth_token" "$mf_api_url/entries?status=unread&limit=0" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.title | ascii_downcase | contains($suchbegriff)) | .id' )"
-      fi
-    fi
-    # erhoehe die zaehlvariable
-    n=$((n+1))
-  done < "$mf_filterlist_file"
+        # setze $url auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
+        url=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=1)
+        # setze $suchbegriff auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
+        suchbegriff=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=2)
+        # in jq uebergebe shell-variablen an jq selber
+        # entferne die erste ebene
+        # suche jeden eintrag wo die feed_url == $url, konvertiere in kleinschreibung, dasselbe fuer den title
+        # gebe dann nur die id aus
+        # die id, wird dann an die variable marked_entries angehangen
+        # z.B. 53443 52332 48787 [...]
+        if [[ -n "$url" ]]; then
+            # abfangen der letzten zeile die leer ist; sonst wird alles gefiltert
+            if [[ -n "$suchbegriff" ]]; then
+                # abfangen der letzten zeile die leer ist; sonst wird alles gefiltert
+                if [[ $MF_DEBUG -eq 1 ]]; then
+                    echo [DEBUG] url:"$url" - value:"$suchbegriff"
+                fi
+                # das leerzeichen am anfang ist notwendig, trennt die zahlenwerte
+                marked_entries+=" $(echo "$unread_entries" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.title | ascii_downcase | contains($suchbegriff)) | .id' )"
+            fi
+        fi
+    done < "$MF_FILTERLIST_FILE"
 }
 function mark_as_read {
-  # fuer jede zahl(leerzeichen-getrennt) in $marked_entries
-  # sende in put request mit curl
-  # der wert muss escaped werden, aber NICHT die variable die uebergeben wird
-  for i in $marked_entries; do
-    anzahl=$((anzahl+1))
-    curl --request PUT --silent --header "X-Auth-Token: $mf_auth_token" --header "Content-Type: application/json" --data "{\"entry_ids\": [$i], \"status\": \"read\"}" "$mf_api_url/entries"
-    # gebe aus welcher eintrag gefilter wurde, cur begrenzt die maximale laenge auf 40 zeichen
-    echo Filtered entry "$i" - "$(curl --silent --header "X-Auth-Token: $mf_auth_token" $mf_api_url/entries/"$i" | jq .title | cut -c -70)".
-  done
-  # gebe gesamzzahl gefilterter item aus
-  if [ "$anzahl" -eq "1" ]; then
-    echo "$anzahl" entry got filtered.
-  fi
-  if [ "$anzahl" -gt "1" ]; then
-    echo "$anzahl" entries got filtered.
-  fi
-  # setze variablen auf leer
-  marked_entries=""
-  anzahl="0"
-}
-function check_dependencies {
-  # pruefe ob jq installiert ist
-  # https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script
-  if ! command -v jq &> /dev/null
-  then
-    echo "jq could not be found!"
-    exit 5
-  fi
-  if ! command -v curl &> /dev/null
-  then
-    echo "curl could not be found!"
-    exit 6
-  fi
+    # https://stackoverflow.com/questions/3869072/test-for-non-zero-length-string-in-bash-n-var-or-var
+    # wenn variabler NICHT leer...
+    # sende in put request mit curl
+    # der wert muss escaped werden, aber NICHT die variable die uebergeben wird
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] mark entries as read"
+        echo "[DEBUG] marked entry ids:"
+        # https://unix.stackexchange.com/questions/353321/remove-all-duplicate-word-from-string-using-shell-script
+        # entfernt doppelte eintraege innerhalb einer zeile
+        echo "$marked_entries" | xargs -n1 | sort -u | xargs | sed -r 's/\s/\, /g'
+    fi
+    # wenn NICHT leer
+    # sed wandelt 123 345 456 in 123, 245, 345 um.
+    if [[ $(echo "$marked_entries" | xargs -n1 | sort -u | xargs | sed -r 's/\s/\, /g') ]]; then
+        curl --request PUT --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" --header "Content-Type: application/json" --data "{\"entry_ids\": [$(echo "$marked_entries" | xargs -n1 | sort -u | xargs | sed -r 's/\s/\, /g')], \"status\": \"read\"}" "$MF_API_URL/entries"
+    # gebe entry-titel aus
+    for i in $(echo "$marked_entries" | xargs -n1 | sort -u | xargs); do
+        # gebe aus welcher eintrag gefiltert wurde, cut begrenzt die maximale laenge auf 70 zeichen
+        echo [INFO] Filtered entry "$i" - "$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL"/entries/"$i" | jq .title | cut -c -70)".
+    done
+    fi
+    # setze variablen auf leer
+    marked_entries=""
 }
 
 
-# fuehre script durchgaengig aus
+
+# Doing
 check_dependencies
+check_connectivity
+# fuehre script durchgaengig aus
 while true; do
-  check_vars
-  if [[ $mf_debug_output -eq 1 ]]; then
+    check_vars
     debug_output
-  fi
-  filter_entries
-  mark_as_read
-  # warte zeit x
-  sleep $mf_sleep
+    get_unread_entries
+    filter_entries
+    mark_as_read
+    # warte zeit x
+    sleep $MF_SLEEP
 done
-
-
-
-
-# Exit-Code
-# 1 - Filter-Datei nicht gefunden
-# 2 - mf_auth_token nicht gesetzt
-# 3 - mf_api_url nicht gesetzt
-# 5 - jq ist nicht installiert
-# 6 - curl ist nicht installiert
