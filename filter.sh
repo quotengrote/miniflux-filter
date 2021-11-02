@@ -11,7 +11,7 @@ MF_FILTERLIST_FILE="${MF_FILTERLIST_FILE:=/data/filter.txt}"
 MF_SLEEP="${MF_SLEEP:=30}"
 ### MF_DEBUG output
 # standardmäßig 0 = aus
-MF_DEBUG="${MF_[DEBUG]=0}"
+MF_DEBUG="${MF_DEBUG=0}"
 
 # Functions
 function output_help {
@@ -163,6 +163,7 @@ function filter_entries {
                 fi
                 # das leerzeichen am anfang ist notwendig, trennt die zahlenwerte
                 marked_entries+=" $(echo "$unread_entries" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.title | ascii_downcase | contains($suchbegriff)) | .id' )"
+                marked_entries+=" $(echo "$unread_entries" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.content | ascii_downcase | contains($suchbegriff)) | .id' )"
             fi
         fi
     done < "$MF_FILTERLIST_FILE"

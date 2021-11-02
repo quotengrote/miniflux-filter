@@ -10,7 +10,6 @@
 * [Debug](#debug)
   * [Exit-Codes](#exit-codes)
 * [Build Container](#build-container)
-* [ToDo](#todo)
 * [License](#license)
 <!-- /TOC -->
 
@@ -85,9 +84,6 @@ export MF_DOCKER_HUB_PASS=<your_docker_hub_pass>
 export MF_DOCKER_HUB_USER=<your_docker_hub_user>
 ./build.sh
 ```
-
-## ToDo
-- [ ] search in content, not only title
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
