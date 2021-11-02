@@ -64,16 +64,16 @@ If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdou
 #### Exit-Codes
 | RC | Description |
 | -- | -- |
-| 1 | Filter-File not found |
-| 2 | MF_AUTH_TOKEN not set |
-| 3 | MF_API_URL not set |
-| 4 | Filter-Datei is a dir |
-| 5 | jq is not installed |
-| 6 | curl is not installed |
-| 7 | could not connect to miniflux |
-| 8 | xargs is not installed |
-| 9 | sed is not installed |
-| 10 | sort is not installed |
+| 1 | $MF_FILTERLIST_FIL not found |
+| 2 | $MF_AUTH_TOKEN not set |
+| 3 | $MF_API_URL not set |
+| 4 | $MF_FILTERLIST_FILE is a dir |
+| 5 | `jq` is not installed |
+| 6 | `curl` is not installed |
+| 7 | could not connect to `miniflux` |
+| 8 | `xargs` is not installed |
+| 9 | `sed` is not installed |
+| 10 | `sort` is not installed |
 
 
 ## Build Container
