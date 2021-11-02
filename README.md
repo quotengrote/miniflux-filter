@@ -80,8 +80,8 @@ If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdou
 ```shell
 git clone https://git.mgrote.net/mg/miniflux-filter
 cd miniflux-filter
-export MF_DOCKER_HUB_PASS=<your_docker_hub_pass>
-export MF_DOCKER_HUB_USER=<your_docker_hub_user>
+export MF_DOCKERHUB_PASS=<your_docker_hub_pass>
+export MF_DOCKERHUB_USER=<your_docker_hub_user>
 ./build.sh
 ```
 

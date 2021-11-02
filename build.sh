@@ -1,5 +1,5 @@
 #!/bin/bash
-MF_DOCKER_HUB_USER="${MF_DOCKER_HUB_USER:=quotengrote}"
+MF_DOCKERHUB_USER="${MF_DOCKERHUB_USER:=quotengrote}"
 db_projectname="miniflux-filter"
 db_commit_id=$(git rev-parse --short HEAD)
 
@@ -12,16 +12,16 @@ if ! shellcheck ./filter.sh; then
 fi
 
 # pruefe ob kw gesetzt ist
-if [[ -z "$MF_DOCKER_HUB_PASS" ]]; then
+if [[ -z "$MF_DOCKERHUB_PASS" ]]; then
     # shellcheck disable=SC2016
-    echo '"$MF_DOCKER_HUB_PASS"' not set.
+    echo '"$MF_DOCKERHUB_PASS"' not set.
     exit 2
 fi
 # login
-docker login --username "$MF_DOCKER_HUB_USER" --password "$MF_DOCKER_HUB_PASS"
+docker login --username "$MF_DOCKERHUB_USER" --password "$MF_DOCKERHUB_PASS"
 # latest
-docker build -t "$MF_DOCKER_HUB_USER"/"$db_projectname" .
-docker push "$MF_DOCKER_HUB_USER"/"$db_projectname":latest
+docker build -t "$MF_DOCKERHUB_USER"/"$db_projectname" .
+docker push "$MF_DOCKERHUB_USER"/"$db_projectname":latest
 # commit-id
-docker tag "$MF_DOCKER_HUB_USER"/"$db_projectname":latest "$MF_DOCKER_HUB_USER"/"$db_projectname":"$db_commit_id"
-docker push "$MF_DOCKER_HUB_USER"/"$db_projectname":"$db_commit_id"
+docker tag "$MF_DOCKERHUB_USER"/"$db_projectname":latest "$MF_DOCKERHUB_USER"/"$db_projectname":"$db_commit_id"
+docker push "$MF_DOCKERHUB_USER"/"$db_projectname":"$db_commit_id"
