@@ -14,6 +14,21 @@ MF_SLEEP="${MF_SLEEP:=30}"
 MF_DEBUG="${MF_[DEBUG]=0}"
 
 # Functions
+function output_help {
+    cat <<EOF
+miniflux-filter
+
+https://git.mgrote.net/mg/miniflux-filter
+
+Usage:
+  - filter.sh [OPTIONS]
+
+Options:
+    -h, --help                  displays this text
+    *                           script gets executed
+
+EOF
+}
 function check_dependencies {
     # pruefe ob jq installiert ist
     # https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script
@@ -54,13 +69,13 @@ function check_vars {
     # -z = ob laenge gleich null ist
     if [[ -z "${MF_AUTH_TOKEN}" ]]; then
         # shellcheck disable=SC2016
-          # shellcheck disable=SC2102
+        # shellcheck disable=SC2102
         echo [ERROR] '"$MF_AUTH_TOKEN"' not set.
         exit 2
     fi
     if [[ -z "${MF_API_URL}" ]]; then
         # shellcheck disable=SC2016
-          # shellcheck disable=SC2102
+        # shellcheck disable=SC2102
         echo [ERROR] '"$MF_API_URL"' not set.
         exit 3
     fi
@@ -181,15 +196,21 @@ function mark_as_read {
 
 
 # Doing
-check_dependencies
-check_connectivity
-# fuehre script durchgaengig aus
-while true; do
-    check_vars
-    debug_output
-    get_unread_entries
-    filter_entries
-    mark_as_read
-    # warte zeit x
-    sleep $MF_SLEEP
-done
+case "$1" in
+    --help | -h | help)
+        output_help
+        ;;
+    *)
+        check_dependencies
+        check_connectivity
+        # fuehre script durchgaengig aus
+        while true; do
+            check_vars
+            debug_output
+            get_unread_entries
+            filter_entries
+            mark_as_read
+            # warte zeit x
+            sleep $MF_SLEEP
+        done
+esac

@@ -15,7 +15,7 @@
 <!-- /TOC -->
 
 ### Introduction
-``miniflux-filter`` is a small bash-script for [miniflux](https://miniflux.app) that marks certain articles as read, if the search conditions met.
+``miniflux-filter`` is a small bash-script for [miniflux](https://miniflux.app) that marks certain articles as read, if the search conditions are met.
 
 ### Getting Started
 1. create an [api-key](https://miniflux.app/docs/api.html#authentication) in miniflux
