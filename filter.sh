@@ -162,7 +162,9 @@ function filter_entries {
                     echo [DEBUG] url:"$url" - value:"$suchbegriff"
                 fi
                 # das leerzeichen am anfang ist notwendig, trennt die zahlenwerte
+                # suche in titel
                 marked_entries+=" $(echo "$unread_entries" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.title | ascii_downcase | contains($suchbegriff)) | .id' )"
+                # suche in content
                 marked_entries+=" $(echo "$unread_entries" | jq --arg url "$url" --arg suchbegriff "$suchbegriff" '.entries[] | select(.feed.site_url | ascii_downcase | contains($url)) | select(.content | ascii_downcase | contains($suchbegriff)) | .id' )"
             fi
         fi
@@ -186,8 +188,9 @@ function mark_as_read {
         curl --request PUT --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" --header "Content-Type: application/json" --data "{\"entry_ids\": [$(echo "$marked_entries" | xargs -n1 | sort -u | xargs | sed -r 's/\s/\, /g')], \"status\": \"read\"}" "$MF_API_URL/entries"
     # gebe entry-titel aus
     for i in $(echo "$marked_entries" | xargs -n1 | sort -u | xargs); do
-        # gebe aus welcher eintrag gefiltert wurde, cut begrenzt die maximale laenge auf 70 zeichen
-        echo [INFO] Filtered entry "$i" - "$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL"/entries/"$i" | jq .title | cut -c -70)".
+        # gebe aus welcher eintrag gefiltert wurde, cut begrenzt die maximale laenge auf 100 zeichen
+        # jq "XXX", fügt XXX in ausgabe hinzu
+        echo [INFO] Filtered entry "$i" - "$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL"/entries/"$i" | jq --join-output '"url: ",.feed.site_url," - title: ", .title' | cut -c -100)".
     done
     fi
     # setze variablen auf leer
