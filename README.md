@@ -23,7 +23,7 @@
 4. ````docker-compose up````
 
 #### example docker-compose
-```
+```yaml
 version: '3.2'
 services:
   mf-filter:
@@ -41,7 +41,7 @@ services:
 
 ```
 #### example filter-file
-```
+```ini
 <part_of_url>:<search string, anything goes, but not :>
 sueddeutsche.de:FC Bayern
 heise.de:software-architektur.tv
@@ -64,10 +64,10 @@ If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdou
 #### Exit-Codes
 | RC | Description |
 | -- | -- |
-| 1 | $MF_FILTERLIST_FIL not found |
-| 2 | $MF_AUTH_TOKEN not set |
-| 3 | $MF_API_URL not set |
-| 4 | $MF_FILTERLIST_FILE is a dir |
+| 1 | `$MF_FILTERLIST_FILE` not found |
+| 2 | `$MF_AUTH_TOKEN` not set |
+| 3 | `$MF_API_URL` not set |
+| 4 | `$MF_FILTERLIST_FILE` is a dir |
 | 5 | `jq` is not installed |
 | 6 | `curl` is not installed |
 | 7 | could not connect to `miniflux` |
@@ -77,13 +77,14 @@ If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdou
 
 
 ## Build Container
-```
+```shell
 git clone https://git.mgrote.net/mg/miniflux-filter
 cd miniflux-filter
 export MF_DOCKER_HUB_PASS=<your_docker_hub_pass>
 export MF_DOCKER_HUB_USER=<your_docker_hub_user>
 ./build.sh
 ```
+
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
