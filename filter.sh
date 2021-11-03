@@ -150,9 +150,9 @@ function filter_entries {
             echo "[DEBUG] set search values"
         fi
         # setze $url auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
-        url=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=1)
+        url=$(echo "$line" | tr '[:upper:]' '[:lower:]' | awk --field-separator="::" '{print $1}')
         # setze $suchbegriff auf den Wert vor dem Trennzeichen/Delimiter, ersetze alle Grossschreibungen durch Kleinschreibung
-        suchbegriff=$(echo "$line" | tr '[:upper:]' '[:lower:]' | cut --delimiter=: --field=2)
+        suchbegriff=$(echo "$line" | tr '[:upper:]' '[:lower:]' | awk --field-separator="::" '{print $2}')
         # in jq uebergebe shell-variablen an jq selber
         # entferne die erste ebene
         # suche jeden eintrag wo die feed_url == $url, konvertiere in kleinschreibung, dasselbe fuer den title
