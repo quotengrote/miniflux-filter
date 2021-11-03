@@ -41,6 +41,9 @@ services:
 
 ```
 #### example filter-file
+  * Format: `url::search`
+  * case-insensitive
+
 ```ini
 <part_of_url>::<search string, anything goes>
 sueddeutsche.de::FC Bayern
