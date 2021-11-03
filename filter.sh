@@ -60,6 +60,11 @@ function check_dependencies {
         echo "[ERROR] sort could not be found!"
         exit 10
     fi
+    if ! command -v awk &> /dev/null
+    then
+        echo "[ERROR] awk could not be found!"
+        exit 11
+    fi
 }
 function check_vars {
     if [[ $MF_DEBUG -eq 1 ]]; then
