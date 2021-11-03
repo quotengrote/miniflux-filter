@@ -1,5 +1,6 @@
 FROM ubuntu:focal
 
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends bash curl ca-certificates jq \
     && apt-get clean \

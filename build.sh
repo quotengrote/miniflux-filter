@@ -11,6 +11,12 @@ if ! shellcheck ./filter.sh; then
     exit 1
 fi
 
+if ! docker run --rm -i ghcr.io/hadolint/hadolint < dockerfile; then
+    echo "-----------------------------------"
+    echo "warning: fix hadolint errors"
+    exit 1
+fi
+
 # pruefe ob kw gesetzt ist
 if [[ -z "$MF_DOCKERHUB_PASS" ]]; then
     # shellcheck disable=SC2016
