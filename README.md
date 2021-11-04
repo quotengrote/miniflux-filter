@@ -41,13 +41,16 @@ services:
 
 ```
 #### example filter-file
+  * Format: `url::search`
+  * case-insensitive
+
 ```ini
-<part_of_url>:<search string, anything goes, but not :>
-sueddeutsche.de:FC Bayern
-heise.de:software-architektur.tv
-heise.de:heise-angebot
-tagesschau.de:FC Barcelona
-heise.de:TechStage |
+<part_of_url>::<search string, anything goes>
+sueddeutsche.de::FC Bayern
+heise.de::software-architektur.tv
+heise.de::heise-angebot
+tagesschau.de::FC Barcelona
+heise.de::TechStage |
 [...]
 ```
 
@@ -74,7 +77,7 @@ If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdou
 | 8 | `xargs` is not installed |
 | 9 | `sed` is not installed |
 | 10 | `sort` is not installed |
-
+| 11 | `awk` is not installed |
 
 ## Build Container
 ```shell
