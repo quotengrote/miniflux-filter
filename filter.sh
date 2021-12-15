@@ -211,9 +211,9 @@ case "$1" in
         ;;
     *)
         check_dependencies
-        check_connectivity
         # fuehre script durchgaengig aus
         while true; do
+            check_connectivity
             check_vars
             debug_output
             get_unread_entries
