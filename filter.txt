@@ -1,3 +1,4 @@
+9to5linux.com::9to5Linux Weekly Roundup:
 astralcodexten.substack.com::Open Thread
 augengeradeaus.net::Sicherheitshalber der Podcast
 heise.de::#heiseshow
@@ -23,9 +24,13 @@ tagesschau.de::FC Barcelona
 theguardian.com::Guardiola
 theguardian.com::Manchester United
 toonhole.com::Bernai
+twitter.com::Bridge returned error
 www.axios.com::Axios on HBO
 www.computerbase.de::Adrenalin 2020 Edition
 www.computerbase.de::Adrenalin 2021 Edition
+www.computerbase.de::Community: Fotowettbewerb
+www.computerbase.de::Fotowettbewerb:
+www.computerbase.de::Screenshot-Wettbewerb
 www.facebook.com::Bridge returned error
 www.golem.de::Anzeige
 www.golem.de::Aus dem Verlag:
@@ -81,7 +86,9 @@ www.heise.de::Zugriff auf alle Inhalte von heise+
 www.instagram.com::Bridge returned error
 www.mdr.de::Fußball
 www.mdr.de::Fussball
+www.mdr.de::Link des Audios
 www.mdr.de::Link des Videos
+www.mdr.de::Pferdesport:
 www.mdr.de::Podcast "digital Leben":
 www.monkeyuser.com::AdLitteram
 www.planet3dnow.de::AIDA64 Version
@@ -121,6 +128,7 @@ www.planet3dnow.de::ZenTimings
 www.sueddeutsche.de::"Tatort"
 www.sueddeutsche.de::1. FC Köln
 www.sueddeutsche.de::1:1
+www.sueddeutsche.de::1860 München
 www.sueddeutsche.de::ATP-
 www.sueddeutsche.de::ATP Finals
 www.sueddeutsche.de::Barça
@@ -133,10 +141,12 @@ www.sueddeutsche.de::Borussia Dortmund:
 www.sueddeutsche.de::Bundesliga
 www.sueddeutsche.de::Bundestrainer
 www.sueddeutsche.de::BVB
+www.sueddeutsche.de::Champions League:
 www.sueddeutsche.de::Champions-League
 www.sueddeutsche.de::CHIO
 www.sueddeutsche.de::Conference League
 www.sueddeutsche.de::Daniil Medwedew
+www.sueddeutsche.de::Davis Cup
 www.sueddeutsche.de::Derby
 www.sueddeutsche.de::Deutsche Nationalmannschaft
 www.sueddeutsche.de::Deutsche U21:
@@ -168,6 +178,7 @@ www.sueddeutsche.de::Galopp
 www.sueddeutsche.de::Gerard López
 www.sueddeutsche.de::Gladbach
 www.sueddeutsche.de::Guardiola
+www.sueddeutsche.de::Handball-WM
 www.sueddeutsche.de::Hertha
 www.sueddeutsche.de::HSV
 www.sueddeutsche.de::Ibrahimović
@@ -184,6 +195,7 @@ www.sueddeutsche.de::Lewis Hamilton
 www.sueddeutsche.de::Los Angeles Lakers
 www.sueddeutsche.de::Manchester United
 www.sueddeutsche.de::ManCity
+www.sueddeutsche.de::ManUnited
 www.sueddeutsche.de::Mbappé
 www.sueddeutsche.de::Messi
 www.sueddeutsche.de::Monza
@@ -206,6 +218,8 @@ www.sueddeutsche.de::Premier League
 www.sueddeutsche.de::PSV Eindhoven
 www.sueddeutsche.de::Qualifikationsspiel
 www.sueddeutsche.de::Raducanu
+www.sueddeutsche.de::Rangnick
+www.sueddeutsche.de::RB Leipzig:
 www.sueddeutsche.de::Real Madrid
 www.sueddeutsche.de::Reiten
 www.sueddeutsche.de::Ronaldo
@@ -215,6 +229,7 @@ www.sueddeutsche.de::Schiedsrichter
 www.sueddeutsche.de::Ski alpin:
 www.sueddeutsche.de::Skispringen
 www.sueddeutsche.de::ST. Pauli
+www.sueddeutsche.de::Stürmer
 www.sueddeutsche.de::Super League
 www.sueddeutsche.de::Supercup
 www.sueddeutsche.de::Supercup live
@@ -226,6 +241,7 @@ www.sueddeutsche.de::SZ-Podcast
 www.sueddeutsche.de::SZ-Podcast "Und nun zum Sport":
 www.sueddeutsche.de::Tabellenspitze
 www.sueddeutsche.de::Tatort aus
+www.sueddeutsche.de::Tatort München:
 www.sueddeutsche.de::Timo Boll
 www.sueddeutsche.de::Tischtennis WM:
 www.sueddeutsche.de::Toni Kroos
@@ -249,6 +265,7 @@ www.tagesschau.de::Bundesliga
 www.tagesschau.de::BVB
 www.tagesschau.de::Carlsen
 www.tagesschau.de::Champions League
+www.tagesschau.de::Darts-WM:
 www.tagesschau.de::DFB
 www.tagesschau.de::DFB-Bundesgericht
 www.tagesschau.de::Dressurreit
@@ -258,6 +275,7 @@ www.tagesschau.de::Formel-1
 www.tagesschau.de::Fußball
 www.tagesschau.de::Fußball-Bundesliga
 www.tagesschau.de::Fußball-EM
+www.tagesschau.de::Handball:
 www.tagesschau.de::Hertha BSC
 www.tagesschau.de::Hoffenheim
 www.tagesschau.de::Kostic
@@ -277,5 +295,6 @@ www.tagesschau.de::Tuchel
 www.tagesschau.de::UEFA
 www.tagesschau.de::Verstappen
 www.tagesschau.de::WM-Qualifikation
+www.tagesschau.de::WM-Viertelfinale
 www.tagesschau.de::Zukunftspodcast
 www.twitter.com::Bridge returned error
