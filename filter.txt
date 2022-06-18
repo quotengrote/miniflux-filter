@@ -1,13 +1,15 @@
 9to5linux.com::9to5Linux Weekly Roundup:
 astralcodexten.substack.com::Open Thread
 augengeradeaus.net::Sicherheitshalber der Podcast
-heise.de::#heiseshow
-heise.de::Donnerstag
-heise.de::heise+
-heise.de::heise-angebot
-heise.de::SoftwareArchitekTOUR
-heise.de::software-architektur.tv
-heise.de::TechStage |
+www.heise.de::#heiseshow
+www.heise.de::heise meets…
+www.heise.de::heise-Angebot:
+www.heise.de::Donnerstag
+www.heise.de::heise+
+www.heise.de::heise-angebot
+www.heise.de::SoftwareArchitekTOUR
+www.heise.de::software-architektur.tv
+www.heise.de::TechStage |
 mf-bridge::Bridge encountered an unexpected situation
 netzpolitik.org::NPP
 portuguesegeese.com::portuguesegeese.com
@@ -89,6 +91,7 @@ www.mdr.de::Fussball
 www.mdr.de::Link des Audios
 www.mdr.de::Link des Videos
 www.mdr.de::Pferdesport:
+www.mdr.de::Leichtathletik:
 www.mdr.de::Podcast "digital Leben":
 www.monkeyuser.com::AdLitteram
 www.planet3dnow.de::AIDA64 Version
@@ -126,6 +129,10 @@ www.planet3dnow.de::WinRAR
 www.planet3dnow.de::WinSCP
 www.planet3dnow.de::ZenTimings
 www.sueddeutsche.de::"Tatort"
+www.sueddeutsche.de::FC Liverpool:
+www.sueddeutsche.de::Three Lions:
+www.sueddeutsche.de:: Dynamo Dresden:
+www.sueddeutsche.de::Stanley Cup
 www.sueddeutsche.de::1. FC Köln
 www.sueddeutsche.de::1:1
 www.sueddeutsche.de::1860 München
