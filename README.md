@@ -57,6 +57,7 @@ heise.de::TechStage |
 ## Misc
 - [tborychowski/miniflux-filter](https://github.com/tborychowski/miniflux-filter)
 - [jqplay.org](https://jqplay.org)
+- To clean up your `filter.txt` you can use the following script: `./sort_and_remove_double_lines.sh`
 
 ### Debug
 If `MF_DEBUG` is set to `1`, `miniflux-filter`  will print extra output to stdout.
