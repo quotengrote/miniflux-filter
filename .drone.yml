@@ -1,0 +1,47 @@
+---
+kind: pipeline
+type: docker
+name: default
+steps:
+  # https://github.com/hadolint/hadolint/blob/master/docs/INTEGRATION.md
+  - name: hadolint
+    image: hadolint/hadolint:latest-debian
+    # image: ghcr.io/hadolint/hadolint:latest-debian
+    commands:
+      - hadolint --version
+      - hadolint  dockerfile
+  # https://www.shellcheck.net/wiki/Drone
+  - name: shellcheck
+    image: koalaman/shellcheck-alpine:stable
+    commands:
+      - "shellcheck filter.sh"
+  - name: docker_build_and_push
+    image: plugins/docker
+    settings:
+      # Dockerhub-Username
+      username: quotengrote
+      # Dockerhub-Password
+      # als Org-Secret hinterlegt
+      password:
+        from_secret: DOCKERHUB_PASS
+      # Container-Registry
+      # registry: hub.docker.com
+      # Name des Containerfiles
+      dockerfile: dockerfile
+      # Repo auf dem Dockerhub
+      repo: quotengrote/miniflux-filter
+      tags:
+        - latest
+        - ${DRONE_COMMIT_SHA:0:8}
+    when:
+      branch:
+      - master
+    event:
+      include:
+        - push
+#       - pull_request
+
+
+# tag
+
+# auch hastebin und andere container vom hub
