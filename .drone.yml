@@ -39,9 +39,3 @@ steps:
     event:
       include:
         - push
-#       - pull_request
-
-
-# tag
-
-# auch hastebin und andere container vom hub
