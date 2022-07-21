@@ -1,5 +1,7 @@
 # miniflux-filter
 
+[![Build Status](http://docker9.grote.lan/api/badges/mg/miniflux-filter/status.svg)](http://docker9.grote.lan/mg/miniflux-filter)
+
 <!-- TOC titleSize:3 tabSpaces:2 depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
 ### Table of Contents
 * [Introduction](#introduction)
