@@ -3,6 +3,10 @@ kind: pipeline
 type: docker
 name: default
 steps:
+  - name: run gitleaks
+    image: plugins/gitleaks
+    settings:
+      path: .
   # https://github.com/hadolint/hadolint/blob/master/docs/INTEGRATION.md
   - name: hadolint
     image: hadolint/hadolint:latest-debian
