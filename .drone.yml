@@ -9,7 +9,7 @@ steps:
     # image: ghcr.io/hadolint/hadolint:latest-debian
     commands:
       - hadolint --version
-      - hadolint  dockerfile
+      - hadolint  Dockerfile
   # https://www.shellcheck.net/wiki/Drone
   - name: shellcheck
     image: koalaman/shellcheck-alpine:stable
@@ -27,7 +27,7 @@ steps:
       # Container-Registry
       # registry: hub.docker.com
       # Name des Containerfiles
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
       # Repo auf dem Dockerhub
       repo: quotengrote/miniflux-filter
       tags:
