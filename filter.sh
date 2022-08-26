@@ -146,7 +146,7 @@ function debug_output {
         echo [DEBUG] Sleep-Intervall: "$MF_SLEEP"
         echo [DEBUG] Auth-Token: "$MF_AUTH_TOKEN"
         echo [DEBUG] MF-Url: "$MF_API_URL"
-        echo [DEBUG] Anzahl Filter: "$(wc -l "$MF_FILTERLIST_FILE")"
+        echo [DEBUG] Anzahl Filter: "$(wc -l < "$MF_FILTERLIST_FILE")"
         echo -----------------------------------------------------
     fi
 }
@@ -234,10 +234,10 @@ case "$1" in
         check_dependencies
         # fuehre script durchgaengig aus
         while true; do
-            check_ping_connectivity
-            check_api_connectivity
             check_vars
             debug_output
+            check_ping_connectivity
+            check_api_connectivity
             get_unread_entries
             filter_entries
             mark_as_read
