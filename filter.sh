@@ -106,7 +106,7 @@ function check_ping_connectivity {
     mf_ping_connectivity=0
     while [[ $mf_ping_connectivity -eq 0 ]]; do
         # hole fqdn + port aus MF_API_URL und pinge an
-        mf_fqdn=$(echo "$MF_API_URL" |  cut -d'/' -f3 | cut -d':' -f1-2)
+        mf_fqdn=$(echo "$MF_API_URL" |  cut -d'/' -f3 | cut -d':' -f1-2 | cut -d":" -f1)
         if ping -c 1 "$mf_fqdn" > /dev/null 2>&1 ; then
             mf_ping_connectivity=1
         else
