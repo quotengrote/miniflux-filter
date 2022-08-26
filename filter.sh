@@ -98,20 +98,41 @@ function check_vars {
         exit 1
     fi
 }
-function check_connectivity {
+function check_ping_connectivity {
     if [[ $MF_DEBUG -eq 1 ]]; then
-        echo "[DEBUG] check if miniflux-api can be reached"
+        echo "[DEBUG] check if miniflux can be reached with ping"
     fi
     # pruefe ob miniflux erreichbar ist, wenn ja setze abbruchbedingung, sonst warte
-    mf_connectivity=0
-    while [[ $mf_connectivity -eq 0 ]]; do
-        http_status_code=$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL/me" -i | grep HTTP/2 | awk '{print $2}')
-        if [[ $http_status_code -eq 200 ]]; then
-            mf_connectivity=1
+    mf_ping_connectivity=0
+    while [[ $mf_ping_connectivity -eq 0 ]]; do
+        # hole fqdn + port aus MF_API_URL und pinge an
+        mf_fqdn=$(echo "$MF_API_URL" |  cut -d'/' -f3 | cut -d':' -f1-2)
+        if ping -c 1 "$mf_fqdn" > /dev/null 2>&1 ; then
+            mf_ping_connectivity=1
         else
-            mf_connectivity=0
+            mf_ping_connectivity=0
             sleep 10
-            echo "[INFO] wait for miniflux-api..."
+            echo "[INFO] wait for miniflux (ping)..."
+            if [[ $MF_DEBUG -eq 1 ]]; then
+                echo "[DEBUG] miniflux could not be pinged, wait 10s"
+            fi
+        fi
+    done
+}
+function check_api_connectivity {
+    if [[ $MF_DEBUG -eq 1 ]]; then
+        echo "[DEBUG] check if miniflux-api can be reached with curl"
+    fi
+    # pruefe ob miniflux erreichbar ist, wenn ja setze abbruchbedingung, sonst warte
+    mf_api_connectivity=0
+    while [[ $mf_api_connectivity -eq 0 ]]; do
+        http_status_code=$(curl --silent --header "X-Auth-Token: $MF_AUTH_TOKEN" "$MF_API_URL/me" -i | grep HTTP/2 | awk '{print $2}')
+        if [[ $http_status_code -eq 200 ]] ; then
+            mf_api_connectivity=1
+        else
+            mf_api_connectivity=0
+            sleep 10
+            echo "[INFO] wait for miniflux (api)..."
             if [[ $MF_DEBUG -eq 1 ]]; then
                 echo "[DEBUG] api could not be reached, wait 10s"
             fi
@@ -213,7 +234,8 @@ case "$1" in
         check_dependencies
         # fuehre script durchgaengig aus
         while true; do
-            check_connectivity
+            check_ping_connectivity
+            check_api_connectivity
             check_vars
             debug_output
             get_unread_entries

@@ -6,7 +6,7 @@ ENV http_proxy=http://acng.grote.lan:9999
 # hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends bash curl ca-certificates jq curl findutils sed coreutils gawk \
+    && apt-get install -y --no-install-recommends bash curl ca-certificates jq curl findutils sed coreutils gawk iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /data \

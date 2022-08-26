@@ -32,7 +32,9 @@ steps:
         - ${DRONE_COMMIT_SHA:0:8}
     when:
       branch:
-      - master
-    event:
-      include:
-        - push
+        - master
+      event:
+        include:
+          - push
+        exclude:
+          - pull_request
