@@ -34,7 +34,5 @@ steps:
       branch:
         - master
       event:
-        include:
-          - push
         exclude:
           - pull_request
