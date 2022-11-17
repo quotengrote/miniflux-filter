@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV http_proxy=http://acng.grote.lan:9999
+ENV http_proxy=http://acng2.grote.lan:9999
 
 # hadolint ignore=DL3008
 RUN apt-get update \
