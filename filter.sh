@@ -242,6 +242,6 @@ case "$1" in
             filter_entries
             mark_as_read
             # warte zeit x
-            sleep $MF_SLEEP
+            sleep "$MF_SLEEP"
         done
 esac
