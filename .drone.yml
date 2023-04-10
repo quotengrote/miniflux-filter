@@ -19,7 +19,7 @@ steps:
     commands:
       - "shellcheck filter.sh"
 
-  - name: docker_build_and_push
+  - name: docker_build_and_push_master
     image: plugins/docker
     settings:
       username: quotengrote
@@ -34,6 +34,22 @@ steps:
     when:
       branch:
         - master
+      event:
+        exclude:
+          - pull_request
+
+  - name: docker_build_and_push
+    image: plugins/docker
+    settings:
+      username: quotengrote
+      password:
+        from_secret: DOCKERHUB_PASS
+      dockerfile: Dockerfile
+      repo: quotengrote/miniflux-filter
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - ${DRONE_COMMIT_BRANCH}
+    when:
       event:
         exclude:
           - pull_request
