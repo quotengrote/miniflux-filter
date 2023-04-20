@@ -19,29 +19,30 @@ steps:
     commands:
       - "shellcheck filter.sh"
 
-  - name: docker_build_and_push_master
+  - name: docker_build_and_push_selfhosted
     image: plugins/docker
     settings:
-      username: quotengrote
+      username:
+        from_secret: OCI-REGISTRY-USER
       password:
-        from_secret: DOCKERHUB_PASS
+        from_secret: OCI-REGISTRY-PASS
       dockerfile: Dockerfile
-      repo: quotengrote/miniflux-filter
+      repo: registry.mgrote.net/miniflux-filter
+      registry: registry.mgrote.net
       tags:
-        - latest
         - ${DRONE_COMMIT_SHA:0:8}
         - ${DRONE_COMMIT_BRANCH}
+        - latest
     when:
-      branch:
-        - master
       event:
         exclude:
           - pull_request
 
-  - name: docker_build_and_push
+  - name: docker_build_and_push_dockerhub
     image: plugins/docker
     settings:
-      username: quotengrote
+      username:
+        from_secret: DOCKERHUB_USER
       password:
         from_secret: DOCKERHUB_PASS
       dockerfile: Dockerfile
@@ -49,6 +50,7 @@ steps:
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
         - ${DRONE_COMMIT_BRANCH}
+        - latest
     when:
       event:
         exclude:
