@@ -22,10 +22,6 @@ steps:
   - name: docker_build_and_push_selfhosted
     image: plugins/docker
     settings:
-      username:
-        from_secret: OCI-REGISTRY-USER
-      password:
-        from_secret: OCI-REGISTRY-PASS
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter
       registry: registry.mgrote.net
