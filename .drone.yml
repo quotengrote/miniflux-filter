@@ -7,6 +7,10 @@ steps:
     image: plugins/gitleaks
     settings:
       path: .
+    when:
+      event:
+        exclude:
+          - tag
 
   - name: hadolint
     image: hadolint/hadolint:latest-debian
@@ -33,6 +37,7 @@ steps:
       event:
         exclude:
           - pull_request
+          - tag
 
   - name: docker_build_and_push_dockerhub
     image: plugins/docker
@@ -51,3 +56,31 @@ steps:
       event:
         exclude:
           - pull_request
+          - tag
+
+  - name: docker_build_and_push_selfhosted_tag
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      repo: registry.mgrote.net/miniflux-filter
+      registry: registry.mgrote.net
+      tags:
+        - ${DRONE_TAG}
+    when:
+      event:
+        - tag
+
+  - name: docker_build_and_push_dockerhub_tag
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      dockerfile: Dockerfile
+      repo: quotengrote/miniflux-filter
+      tags:
+        - ${DRONE_TAG}
+    when:
+      event:
+        - tag
