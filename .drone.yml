@@ -30,7 +30,6 @@ steps:
       repo: registry.mgrote.net/miniflux-filter
       registry: registry.mgrote.net
       tags:
-        - ${DRONE_COMMIT_SHA:0:8}
         - ${DRONE_COMMIT_BRANCH}
         - latest
     when:
@@ -49,7 +48,6 @@ steps:
       dockerfile: Dockerfile
       repo: quotengrote/miniflux-filter
       tags:
-        - ${DRONE_COMMIT_SHA:0:8}
         - ${DRONE_COMMIT_BRANCH}
         - latest
     when:
