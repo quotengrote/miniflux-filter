@@ -2,6 +2,10 @@
 kind: pipeline
 type: docker
 name: default
+
+environment:
+  http_proxy: 192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
+
 steps:
   - name: run gitleaks
     image: plugins/gitleaks
