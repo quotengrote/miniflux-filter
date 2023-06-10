@@ -1,13 +1,13 @@
 ---
 kind: pipeline
 type: docker
-name: default
+name: linting
 
 environment:
   http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
 
 steps:
-  - name: run gitleaks
+  - name: gitleaks
     image: plugins/gitleaks
     settings:
       path: .
@@ -19,39 +19,28 @@ steps:
   - name: hadolint
     image: hadolint/hadolint:latest-debian
     commands:
-      - hadolint --version
-      - hadolint  Dockerfile
+      - hadolint Dockerfile
 
   - name: shellcheck
     image: koalaman/shellcheck-alpine:stable
     commands:
       - "shellcheck filter.sh"
 
+---
+kind: pipeline
+type: docker
+name: selfhosted
+depends_on: # bezieht sich auf linting pipeline
+  - linting
+environment:
+  http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
+steps:
   - name: docker_build_and_push_selfhosted
     image: plugins/docker
     settings:
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter
       registry: registry.mgrote.net
-      tags:
-        - ${DRONE_COMMIT_SHA:0:8}
-        - ${DRONE_COMMIT_BRANCH}
-        - latest
-    when:
-      event:
-        exclude:
-          - pull_request
-          - tag
-
-  - name: docker_build_and_push_dockerhub
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      dockerfile: Dockerfile
-      repo: quotengrote/miniflux-filter
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
         - ${DRONE_COMMIT_BRANCH}
@@ -73,6 +62,34 @@ steps:
     when:
       event:
         - tag
+
+---
+kind: pipeline
+type: docker
+name: dockerhub
+environment:
+  http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
+depends_on: # bezieht sich auf linting pipeline
+  - linting
+steps:
+  - name: docker_build_and_push_dockerhub
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      dockerfile: Dockerfile
+      repo: quotengrote/miniflux-filter
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - ${DRONE_COMMIT_BRANCH}
+        - latest
+    when:
+      event:
+        exclude:
+          - pull_request
+          - tag
 
   - name: docker_build_and_push_dockerhub_tag
     image: plugins/docker
