@@ -3,9 +3,6 @@ kind: pipeline
 type: docker
 name: linting
 
-environment:
-  http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
-
 steps:
   - name: gitleaks
     image: plugins/gitleaks
@@ -32,8 +29,6 @@ type: docker
 name: selfhosted
 depends_on: # bezieht sich auf linting pipeline
   - linting
-environment:
-  http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
 steps:
   - name: docker_build_and_push_selfhosted
     image: plugins/docker
@@ -67,8 +62,6 @@ steps:
 kind: pipeline
 type: docker
 name: dockerhub
-environment:
-  http_proxy: http://192.168.2.43:9999 # für apt, zeigt auf docker10.grote.lan
 depends_on: # bezieht sich auf linting pipeline
   - linting
 steps:
