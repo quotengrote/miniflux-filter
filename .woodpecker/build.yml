@@ -1,0 +1,34 @@
+---
+kind: pipeline
+type: docker
+name: docker_build
+depends_on:
+  - lint
+steps:
+  selfhosted_tag:
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      repo: registry.mgrote.net/miniflux-filter
+      registry: registry.mgrote.net
+      tags:
+        - ${CI_COMMIT_TAG}
+    when:
+      event:
+        - tag
+
+  selfhosted_push:
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile
+      repo: registry.mgrote.net/miniflux-filter
+      registry: registry.mgrote.net
+      tags:
+        - ${CI_COMMIT_SHA:0:8}
+        - ${CI_COMMIT_BRANCH}
+        - latest
+    when:
+      event:
+        exclude:
+          - pull_request
+          - tag

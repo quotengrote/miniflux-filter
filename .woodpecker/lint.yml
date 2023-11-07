@@ -1,0 +1,21 @@
+---
+kind: pipeline
+type: docker
+name: linting
+steps:
+  gitleaks:
+    image: zricethezav/gitleaks:latest
+    commands:
+      - gitleaks detect --no-git --verbose --source $CI_WORKSPACE
+    when:
+      event:
+        exclude:
+          - tag
+  hadolint:
+    image: hadolint/hadolint:latest-debian
+    commands:
+      - hadolint Dockerfile
+    when:
+      event:
+        exclude:
+          - tag
