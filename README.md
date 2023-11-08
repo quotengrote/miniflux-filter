@@ -1,5 +1,7 @@
 # miniflux-filter
 
+[![status-badge](https://ci.mgrote.net/api/badges/9/status.svg)](https://ci.mgrote.net/repos/9)
+
 <!-- TOC titleSize:3 tabSpaces:2 depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
 ### Table of Contents
 * [Introduction](#introduction)
