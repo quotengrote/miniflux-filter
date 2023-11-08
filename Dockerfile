@@ -1,14 +1,18 @@
-FROM ubuntu:focal
-
-ENV DEBIAN_FRONTEND=noninteractive
+# hadolint ignore=DL3007
+FROM alpine:latest
 
 # hadolint ignore=DL3008
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends bash curl ca-certificates jq curl findutils sed coreutils gawk iputils-ping \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /data \
+RUN apk add \
+    bash \
+    curl \
+    ca-certificates \
+    jq \
+    curl \
+    findutils \
+    sed \
+    coreutils \
+    gawk \
+    iputils-ping \
     && touch /data/filter.txt
 
 # findutils = xargs
