@@ -1,8 +1,8 @@
 # hadolint ignore=DL3007
 FROM alpine:latest
 
-# hadolint ignore=DL3008
-RUN apk add \
+# hadolint ignore=DL3018
+RUN apk add --no-cache \
     bash \
     curl \
     ca-certificates \
