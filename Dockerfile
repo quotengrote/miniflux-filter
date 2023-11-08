@@ -13,6 +13,7 @@ RUN apk add --no-cache \
     coreutils \
     gawk \
     iputils-ping \
+    && mkdir /data \
     && touch /data/filter.txt
 
 # findutils = xargs
