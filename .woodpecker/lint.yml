@@ -9,7 +9,7 @@ steps:
         exclude:
           - tag
   hadolint:
-    image: hadolint/hadolint:latest-debian@sha256:9cef74a390694cdc01dd119cbba9adac5bb6671ce67d8d79eb7ec68f497a3684
+    image: pipelinecomponents/hadolint:0.25.9@sha256:9cef74a390694cdc01dd119cbba9adac5bb6671ce67d8d79eb7ec68f497a3684
     commands:
       - hadolint Dockerfile
     when:
