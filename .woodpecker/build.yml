@@ -3,7 +3,7 @@ depends_on:
   - lint
 steps:
   selfhosted_tag:
-    image: plugins/docker
+    image: plugins/docker@sha256:2f157400c2cb7de1b309b0f044f119375108218e54d38e1340e00b9f93abdefb
     settings:
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter
@@ -15,7 +15,7 @@ steps:
         - tag
 
   selfhosted_push:
-    image: plugins/docker
+    image: plugins/docker@sha256:2f157400c2cb7de1b309b0f044f119375108218e54d38e1340e00b9f93abdefb
     settings:
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter

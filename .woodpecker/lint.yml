@@ -1,7 +1,7 @@
 ---
 steps:
   gitleaks:
-    image: zricethezav/gitleaks:latest
+    image: zricethezav/gitleaks:latest@sha256:6945c62ca019ead32bc337ab0c9fd055e98d82961765d38b7ccccc84dae95d0f
     commands:
       - gitleaks detect --no-git --verbose --source $CI_WORKSPACE
     when:
@@ -9,7 +9,7 @@ steps:
         exclude:
           - tag
   hadolint:
-    image: hadolint/hadolint:latest-debian
+    image: hadolint/hadolint:latest-debian@sha256:9cef74a390694cdc01dd119cbba9adac5bb6671ce67d8d79eb7ec68f497a3684
     commands:
       - hadolint Dockerfile
     when:
