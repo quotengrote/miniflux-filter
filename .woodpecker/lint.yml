@@ -8,6 +8,7 @@ steps:
       event:
         exclude:
           - tag
+
   hadolint:
     image: pipelinecomponents/hadolint:0.26.0@sha256:7122937006c7a9bcbb78ce764d3c2f0092f183b843ad128bc9fd6ea918e22d5b
     commands:
@@ -16,3 +17,19 @@ steps:
       event:
         exclude:
           - tag
+
+  shellcheck:
+    image: registry.mgrote.net/allzweckcontainer
+    commands:
+      - |
+        find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do
+          if echo "$line" | grep -q "shell script"; then
+            file_path=$(echo "$line" | awk -F':' '{print $1}')
+            shellcheck "$file_path"
+          fi
+        done
+    when:
+      event:
+        exclude:
+          - tag
+...
