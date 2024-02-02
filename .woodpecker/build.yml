@@ -1,31 +1,19 @@
 ---
 depends_on:
   - lint
-steps:
-  selfhosted_tag:
-    image: plugins/docker@sha256:2f157400c2cb7de1b309b0f044f119375108218e54d38e1340e00b9f93abdefb
-    settings:
-      dockerfile: Dockerfile
-      repo: registry.mgrote.net/miniflux-filter
-      registry: registry.mgrote.net
-      tags:
-        - ${CI_COMMIT_TAG}
-    when:
-      event:
-        - tag
 
+variables: # https://woodpecker-ci.org/docs/usage/advanced-usage
+  - &VERSION 'v1.0.${CI_PIPELINE_NUMBER}' # wird für die Docker-Tags verwendet
+
+steps:
   selfhosted_push:
-    image: plugins/docker@sha256:2f157400c2cb7de1b309b0f044f119375108218e54d38e1340e00b9f93abdefb
+    image: "woodpeckerci/plugin-docker-buildx:3.0.1"
     settings:
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter
       registry: registry.mgrote.net
       tags:
+        - *VERSION
         - ${CI_COMMIT_SHA:0:8}
         - ${CI_COMMIT_BRANCH}
         - latest
-    when:
-      event:
-        exclude:
-          - pull_request
-          - tag
