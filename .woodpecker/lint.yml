@@ -19,7 +19,7 @@ steps:
           - tag
 
   shellcheck:
-    image: registry.mgrote.net/allzweckcontainer
+    image: "registry.mgrote.net/allzweckcontainer:1.0.120"
     commands:
       - |
         find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do
