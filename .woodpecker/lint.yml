@@ -19,7 +19,7 @@ steps:
           - tag
 
   shellcheck:
-    image: "registry.mgrote.net/allzweckcontainer:v1.0.131"
+    image: "koalaman/shellcheck-alpine:latest"
     commands:
       - |
         find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do
@@ -28,8 +28,4 @@ steps:
             shellcheck "$file_path"
           fi
         done
-    when:
-      event:
-        exclude:
-          - tag
 ...
