@@ -5,21 +5,17 @@ steps:
     commands:
       - gitleaks detect --no-git --verbose --source $CI_WORKSPACE
     when:
-      event:
-        exclude:
-          - tag
+      - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 
   hadolint:
     image: pipelinecomponents/hadolint:0.26.0@sha256:7122937006c7a9bcbb78ce764d3c2f0092f183b843ad128bc9fd6ea918e22d5b
     commands:
       - hadolint Dockerfile
     when:
-      event:
-        exclude:
-          - tag
+      - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 
   shellcheck:
-    image: "koalaman/shellcheck-alpine:latest@sha256:eed99e46acb69ede0f68db4fd8f1b3b00cc09d66cb7d4d6f1f6296bd8833932d"
+    image: "koalaman/shellcheck-alpine:latest@sha256:7b0682c5786633fc075f69852e5c7521767e8dcb512c43cf8041b022bdc98198"
     commands:
       - |
         find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do
@@ -28,4 +24,6 @@ steps:
             shellcheck "$file_path"
           fi
         done
+    when:
+      - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 ...

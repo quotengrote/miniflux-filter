@@ -17,3 +17,6 @@ steps:
         - ${CI_COMMIT_SHA:0:8}
         - ${CI_COMMIT_BRANCH}
         - latest
+    when:
+      - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
+    ...
