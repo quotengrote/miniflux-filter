@@ -19,7 +19,7 @@ steps:
           - tag
 
   shellcheck:
-    image: "koalaman/shellcheck-alpine:latest"
+    image: "koalaman/shellcheck-alpine:latest@sha256:7b0682c5786633fc075f69852e5c7521767e8dcb512c43cf8041b022bdc98198"
     commands:
       - |
         find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do
