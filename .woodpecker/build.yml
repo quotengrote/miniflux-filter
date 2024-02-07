@@ -7,7 +7,7 @@ variables: # https://woodpecker-ci.org/docs/usage/advanced-usage
 
 steps:
   selfhosted_push:
-    image: "woodpeckerci/plugin-docker-buildx:3.0.1"
+    image: "woodpeckerci/plugin-docker-buildx:3.1.0"
     settings:
       dockerfile: Dockerfile
       repo: registry.mgrote.net/miniflux-filter
