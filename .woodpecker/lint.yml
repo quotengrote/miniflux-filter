@@ -1,21 +1,21 @@
 ---
 steps:
   gitleaks:
-    image: zricethezav/gitleaks:v8.18.2@sha256:eadfe256fa18d6a78a717abc9ed454c8e03865d1c46d627bca83977f4424901a
+    image: zricethezav/gitleaks:v8.18.2
     commands:
       - gitleaks detect --no-git --verbose --source $CI_WORKSPACE
     when:
       - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 
   hadolint:
-    image: pipelinecomponents/hadolint:0.26.0@sha256:7122937006c7a9bcbb78ce764d3c2f0092f183b843ad128bc9fd6ea918e22d5b
+    image: pipelinecomponents/hadolint:0.26.0
     commands:
       - hadolint Dockerfile
     when:
       - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 
   shellcheck:
-    image: "koalaman/shellcheck-alpine:latest@sha256:7b0682c5786633fc075f69852e5c7521767e8dcb512c43cf8041b022bdc98198"
+    image: "koalaman/shellcheck-alpine:latest"
     commands:
       - |
         find . -type f -not -path './.git/*' -not -path './collections/*' -exec file {} \; | while IFS= read -r line; do

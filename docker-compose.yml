@@ -9,6 +9,6 @@ services:
       - MF_API_URL=https://miniflux.[...].net/v1
       - MF_SLEEP=60
       #- MF_DEBUG=1
-    image: quotengrote/miniflux-filter:latest@sha256:a99744babfb63fa4566db0ed0219fbffe7580d5dae20b2b018a3bdc8d05aa0c5
+    image: quotengrote/miniflux-filter:latest
     volumes:
       - ./filter.txt:/data/filter.txt
