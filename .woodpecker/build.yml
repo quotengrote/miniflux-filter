@@ -2,21 +2,57 @@
 depends_on:
   - lint
 
-variables: # https://woodpecker-ci.org/docs/usage/advanced-usage
-  - &VERSION 'v1.0.${CI_PIPELINE_NUMBER}' # wird für die Docker-Tags verwendet
+clone:
+  git:
+    image: "woodpeckerci/plugin-git:2.5.0"
+    settings:
+      depth: 9999 # wird benötigt um die Commits zählen zu können
+      lfs: false
+      partial: false
 
 steps:
-  selfhosted_push:
-    image: "woodpeckerci/plugin-docker-buildx:3.1.0"
-    settings:
-      dockerfile: Dockerfile
-      repo: registry.mgrote.net/miniflux-filter
-      registry: registry.mgrote.net
-      tags:
-        - *VERSION
-        - ${CI_COMMIT_SHA:0:8}
-        - ${CI_COMMIT_BRANCH}
-        - latest
+  set_variables:
+    image: "registry.mgrote.net/allzweckcontainer:v1.0.167"
+    commands:
+      # set version
+      - |
+        MAJOR="1"
+        MINOR="1"
+        PATCH="$(git rev-list --count "$CI_COMMIT_BRANCH")"
+        VERSION="v$MAJOR.$MINOR.$PATCH"
+        if [ "$CI_COMMIT_BRANCH" != "main" ] && [ "$CI_COMMIT_BRANCH" != "master" ]; then
+            VERSION=$VERSION-dev
+        fi
+        echo "VERSION=$VERSION" >> .variables
+      # set date
+      - |
+        DATE=$(date --iso-8601=seconds)
+        echo "DATE=$DATE" >> .variables
+
+  build_and_push: # damit dieser Step laufen kann muss das Repo in der Woodpecker-GUI "privilegiert" sein
+    image: "docker:25.0.3"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - cat .variables
+      - source .variables
+      - |
+        docker buildx build \
+        --tag registry.mgrote.net/miniflux-filter \
+        --tag registry.mgrote.net/miniflux-filter:${CI_COMMIT_SHA:0:8} \
+        --tag registry.mgrote.net/miniflux-filter:${CI_COMMIT_BRANCH} \
+        --tag registry.mgrote.net/miniflux-filter:latest \
+        --tag registry.mgrote.net/miniflux-filter:$VERSION \
+        --label org.opencontainers.image.url=$CI_REPO_URL \
+        --label org.opencontainers.image.source=$CI_REPO_URL \
+        --label org.opencontainers.image.revision=$CI_COMMIT_SHA \
+        --label org.opencontainers.image.created=$DATE \
+        --file Dockerfile .
+      - docker push registry.mgrote.net/miniflux-filter:${CI_COMMIT_SHA:0:8}
+      - docker push registry.mgrote.net/miniflux-filter:${CI_COMMIT_BRANCH}
+      - docker push registry.mgrote.net/miniflux-filter:latest
+      - docker push registry.mgrote.net/miniflux-filter:$VERSION
+      - docker push registry.mgrote.net/miniflux-filter
     when:
       - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 ...
