@@ -12,7 +12,7 @@ clone:
 
 steps:
   set_variables:
-    image: "registry.mgrote.net/allzweckcontainer:v1.0.167"
+    image: "registry.mgrote.net/allzweckcontainer:v1.1.99"
     commands:
       # set version
       - |
