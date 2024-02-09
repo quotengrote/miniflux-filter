@@ -38,21 +38,21 @@ steps:
       - source .variables
       - |
         docker buildx build \
-        --tag registry.mgrote.net/miniflux-filter \
-        --tag registry.mgrote.net/miniflux-filter:${CI_COMMIT_SHA:0:8} \
-        --tag registry.mgrote.net/miniflux-filter:${CI_COMMIT_BRANCH} \
-        --tag registry.mgrote.net/miniflux-filter:latest \
-        --tag registry.mgrote.net/miniflux-filter:$VERSION \
+        --tag registry.mgrote.net/$CI_REPO_NAME \
+        --tag registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_SHA:0:8} \
+        --tag registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_BRANCH} \
+        --tag registry.mgrote.net/$CI_REPO_NAME:latest \
+        --tag registry.mgrote.net/$CI_REPO_NAME:$VERSION \
         --label org.opencontainers.image.url=$CI_REPO_URL \
         --label org.opencontainers.image.source=$CI_REPO_URL \
         --label org.opencontainers.image.revision=$CI_COMMIT_SHA \
         --label org.opencontainers.image.created=$DATE \
         --file Dockerfile .
-      - docker push registry.mgrote.net/miniflux-filter:${CI_COMMIT_SHA:0:8}
-      - docker push registry.mgrote.net/miniflux-filter:${CI_COMMIT_BRANCH}
-      - docker push registry.mgrote.net/miniflux-filter:latest
-      - docker push registry.mgrote.net/miniflux-filter:$VERSION
-      - docker push registry.mgrote.net/miniflux-filter
+      - docker push registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_SHA:0:8}
+      - docker push registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_BRANCH}
+      - docker push registry.mgrote.net/$CI_REPO_NAME:latest
+      - docker push registry.mgrote.net/$CI_REPO_NAME:$VERSION
+      - docker push registry.mgrote.net/$CI_REPO_NAME
     when:
       - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 ...
