@@ -36,23 +36,22 @@ steps:
     commands:
       - cat .variables
       - source .variables
+      # https://unix.stackexchange.com/questions/748633/error-multiple-platforms-feature-is-currently-not-supported-for-docker-driver
+      - docker buildx create --use --platform=linux/amd64 --name multi-platform-builder
+      - docker buildx inspect --bootstrap
       - |
         docker buildx build \
-        --tag registry.mgrote.net/$CI_REPO_NAME \
-        --tag registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_SHA:0:8} \
-        --tag registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_BRANCH} \
-        --tag registry.mgrote.net/$CI_REPO_NAME:latest \
-        --tag registry.mgrote.net/$CI_REPO_NAME:$VERSION \
+        --platform=linux/amd64 \
+        --push \
+        --tag registry.mgrote.net/${CI_REPO_NAME}:${CI_COMMIT_SHA:0:8} \
+        --tag registry.mgrote.net/${CI_REPO_NAME}:${CI_COMMIT_BRANCH} \
+        --tag registry.mgrote.net/${CI_REPO_NAME}:latest \
+        --tag registry.mgrote.net/${CI_REPO_NAME}:$VERSION \
         --label org.opencontainers.image.url=$CI_REPO_URL \
         --label org.opencontainers.image.source=$CI_REPO_URL \
         --label org.opencontainers.image.revision=$CI_COMMIT_SHA \
         --label org.opencontainers.image.created=$DATE \
         --file Dockerfile .
-      - docker push registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_SHA:0:8}
-      - docker push registry.mgrote.net/$CI_REPO_NAME:${CI_COMMIT_BRANCH}
-      - docker push registry.mgrote.net/$CI_REPO_NAME:latest
-      - docker push registry.mgrote.net/$CI_REPO_NAME:$VERSION
-      - docker push registry.mgrote.net/$CI_REPO_NAME
     when:
       - evaluate: 'CI_COMMIT_AUTHOR_EMAIL != "renovate@mgrote.net"'
 ...
