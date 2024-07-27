@@ -4,7 +4,7 @@ depends_on:
 
 clone:
   git:
-    image: "woodpeckerci/plugin-git:2.5.0"
+    image: "woodpeckerci/plugin-git:2.5.2"
     settings:
       depth: 9999 # wird benötigt um die Commits zählen zu können
       lfs: false
